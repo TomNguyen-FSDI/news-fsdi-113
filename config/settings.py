@@ -32,7 +32,7 @@ SECRET_KEY = env.str("SECRET_KEY") # look at the file .env for the variable SECR
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=False) # looks at the file .env for DEBUG else set it to False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [".herokuapp.com", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -91,6 +91,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+    # 'default': env.dj_db_url('HEROKU_POSTGRESQL_BLUE_URL')
     'default': env.dj_db_url("DATABASE_URL")
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
