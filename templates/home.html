@@ -3,12 +3,34 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
-    {% if user.is_authenticated %}
-        Hi {{ user.username|capfirst }}! You are {{ user.age }} years old.
-        <p><a href="{% url 'logout' %}">Log out</a></p>
-    {% else %}
-        <p>You are not logged in</p>
-        <a href="{% url 'login' %}">Log in</a> | 
-        <a href="{% url 'signup' %}">Sign up</a>
-    {% endif %}
+    <br />
+    <div class="jumbotron">
+        <h1 class="display-4">Newspaper app</h1>
+        <p class="lead">A Newspaper website built with Django.</p>
+        <p class="lead">
+            <a 
+            href="{% url 'article_list' %}" 
+            class="btn btn-primary btn-lg" 
+            role="button">View All Articles</a>
+        </p>
+    </div>
 {% endblock content %}
+
+{% if user.is_authenticated %}
+    Hi {{ user.username|capfirst }}! You are {{ user.age }} years old.
+    <p><a href="{% url 'logout' %}">Log out</a></p>
+{% else %}
+    <p>You are not logged in</p>
+    <a href="{% url 'login' %}">Log in</a> | 
+    <a href="{% url 'signup' %}">Sign up</a>
+{% endif %}
+
+
+page.video_url|safe =           # passing in the html tags
+page.lyrics|make_list
+page.lyrics|length              # get the length of the string
+page.lyrics.count				# same a page.lyrics|length
+page.lyrics|linebreaks          # make a new line
+page.lyrics|linebreaksbr        # make a new line using break
+{{ timestamp|date:"m/d/y, H:i"}}
+num_parties|pluralize:"es"

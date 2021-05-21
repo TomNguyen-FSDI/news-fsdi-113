@@ -1,12 +1,31 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block title %}Log In{% endblock title %}
 
 {% block content %}
-    <h2>Log In</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Log in</button>
-    </form>
+<div class="position-relative">
+    <div class="position-absolute top-100 start-50 translate-middle-x" style="margin-top:10rem;">
+
+        <div style="box-shadow: -2px 3px 2px #b1b1b1;border: 1px solid #ccc;
+        border-radius: 5px; padding:10px;">
+            <h2 class="text-center">News</h2>
+            <br>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="d-grip gap-2" >
+                    <p>
+                        <a class="fs-6 fst-italic" href="{% url 'password_reset' %}">Forgot Your Password?</a>    
+                    </p>
+                    <button class="btn btn-primary" type="submit" style="width: 100%;">Log in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock content %}
+
+{{ form.username.label_tag }}
+{{ form.username }}
+{{ form.password }}
+https://docs.djangoproject.com/en/3.2/topics/auth/default/
