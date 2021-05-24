@@ -1,35 +1,59 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block cssstyle %}
+<link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
+{% endblock cssstyle %}
 
 {% block title %}Articles{% endblock title %}
 
 {% block content %}
-    {% for article in object_list %}
-    <div class="card">
-        <div class="card-header">
-            <span class="font-weight-bold">
-                {{ article.title }} &middot; 
-            </span>
-            <span class="text-muted">
-                by {{ article.author }} | {{ article.date }}
-            </span>
+    <div class="container">
+
+        {% for article in object_list reversed %}
+        <div class="card mx-auto">
+            {% if article.image.url != '/images/' %}         
+                <a href="{% url 'article_detail' article.pk %}">
+                    <img src="{{ article.image.url }}" class="img-fluid" alt="image">
+                </a>            
+            {% endif %}
             <div class="card-body">
-                {{ article.body }}
-                <a href="{% url 'article_edit' article.pk %}">Edit</a> | <a href="{% url 'article_delete' article.pk %}">Delete</a>
-            </div>
-                <div class="card-footer text-center text-muted">
-                    {% for comment in article.comments.all %}
+                <a href="{% url 'article_detail' article.pk %}" style="text-decoration: none; color: black;">
+                    <div class="card-header">
+                        <h5 class="card-title">{{ article.title|capfirst }}</h5>
+                    </div>
+                    <p class="card-text">{{ article.body }}</p>
                     <p>
-                        <span class="font-weight-bold">
-                            {{ comment.author }} &middot;
+                        <span class="text-muted">
+                            by {{ article.author }} &middot; {{ article.date }}
                         </span>
-                        {{ comment }}
                     </p>
-                    {% endfor %}
+                </a>
+
+                <a href="{% url 'article_detail' article.pk %}" class="btn btn-primary">View Article</a>
+                {% if user == article.author %}
+                <div class="article-detail-ed">
+                    <a class="btn btn-primary" href="{% url 'article_edit' article.pk %}">Edit</a>
+                    <a class="btn btn-primary" href="{% url 'article_delete' article.pk %}">Delete</a>
                 </div>
+                {% endif %}
+            </div>
         </div>
+        <br />
+        {% endfor %}
     </div>
-    <br />
-    {% endfor %}
 {% endblock content %}
 
+<div class="card-footer text-center text-muted">
+        {% for comment in article.comments.all %}
+        <p>
+            <span class="font-weight-bold">
+                {{ comment.author }} &middot;
+            </span>
+            {{ comment }}
+            {{ comment.star }}
+        </p>
+        {% endfor %}
+    </div>
+
+    
 %middot;    # special character the dot is in the middle of the line

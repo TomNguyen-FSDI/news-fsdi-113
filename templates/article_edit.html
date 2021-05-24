@@ -1,12 +1,48 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block cssstyle %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock cssstyle %}
 
 {% block title %}Edit Article{% endblock title %}
 
 {% block content %}
-    <h1>Edit</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button class="btn btn-info ml-2" type="submit">Update</button>
-    </form>
+<div class="container">
+
+    <div class="bg-light p-5 rounded mt-5 shadow">
+        <div class="jumbotron">
+            <h1 class="display-4 text-center">{{ article.title|capfirst }}</h1>
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="controls">
+                    {{ form.title.label_tag }}
+                    <br />{{ form.title }}
+                    <br />
+                    <br />{{ form.body.label_tag }}
+                    <br />{{ form.body }}
+                    <br />
+                    <br />
+                    {% if article.image.url != '/images/' %}
+                        <img class="form-image" src="{{ article.image.url }}">
+                    {% endif %}
+                    <br/>
+                    <br/>{{ form.image }}
+                </div>
+                <br />
+                <button class="btn btn-lg btn-primary ml-2" type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+    
+</div>
 {% endblock content %}
+
+<p class="lead">Edit {{ article.title }}</p>
+{{ form.title.label_tag }}
+{{ form.title }}
+{{ form.body.label_tag }}
+{{ form.body }}
+{{ form.image.label_tag }}
+{{ form.image}}

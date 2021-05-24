@@ -1,18 +1,216 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load poll_extras %}
+{% load crispy_forms_tags %}
+
+{% block cssstyle %}
+<link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
+{% endblock cssstyle %}
 
 {% block title %}{{ object.title }}{% endblock title %}
 
 {% block content %}
-    <div class="article-entry">
-        <h2>{{ object.title }}</h2>
-        <p>{{ object.author }} | {{ object.date }}</p>
-        <p>{{ object.body }}</p> 
+<div class="container">
+    <div class="bg-light p-5 rounded mt-5 shadow">
+        <div class="jumbotron">
+
+            <div class="article-entry">
+                <h2>{{ object.title|capfirst }}</h2>
+                
+                <br />
+                {% if article.image.url != '/images/' %}
+                <img class="rounded mx-auto d-block img-fluid" src="{{ article.image.url }}" alt="your image">
+                {% endif %}
+                <br />
+                <span class="text-muted">
+                    <p>{{ object.author }} | {{ object.date }}</p>
+                </span>
+
+                <span class="article-body">
+                    <p>{{ object.body }}</p>
+                </span>
+            </div>
+            <p>
+                {% if user == article.author %}
+            <div class="article-detail-ed">
+                <a class="btn btn-primary" href="{% url 'article_edit' article.pk %}">Edit</a>
+                <a class="btn btn-primary" href="{% url 'article_delete' article.pk %}">Delete</a>
+            </div>
+            {% endif %}
+            </p>
+        </div>
     </div>
-    <p>
-        <a href="{% url 'article_edit' article.pk %}">Edit</a>
-        <a href="{% url 'article_delete' article.pk %}">Delete</a>
-        <p>
-            Back to <a href="{% url 'article_list' %}">All Articles</a>
-        </p>
-    </p>
+    {% if article.comments.all|length != 0 %}
+    <div class="bg-light px-3 pt-3 rounded mt-3 shadow">
+        <div class="jumbotron">
+        <div>
+            <h2>Overall Reviews</h2>
+        </div>
+        {% with total=article.pk|total_stars total_1_stars=article.pk|total_num_stars:1 total_2_stars=article.pk|total_num_stars:2 total_3_stars=article.pk|total_num_stars:3 total_4_stars=article.pk|total_num_stars:4 total_5_stars=article.pk|total_num_stars:5 total_average=article.pk|total_stars_average %}
+
+            {% with total_average|get_digit:1 as total_average_first %}
+                {% with 5|sub:total_average_first as stars_left %}
+                    {% if total_average_first != 0 %}
+                        {% for _  in "x"|ljust:total_average_first %}
+                        <span class="fa fa-star checked" style="color: orange;"></span>
+                        {% endfor %}
+                    {% endif %}
+                    {% if star_left != 0 %}
+                        {% for _ in "x"|ljust:stars_left %}
+                        <span class="far fa-star" style="color: orange;"></span>
+                        {% endfor %}
+                    {% endif %}
+                    {% with bar_1=article.pk|total_bar_average:total_1_stars bar_2=article.pk|total_bar_average:total_2_stars bar_3=article.pk|total_bar_average:total_3_stars bar_4=article.pk|total_bar_average:total_4_stars bar_5=article.pk|total_bar_average:total_5_stars %}
+                    <div class="row" style="width: 450px;">
+                        <div class="side">
+                            <div>5 star</div>
+                        </div>
+                        <div class="middle">
+                            <div class="bar-container">
+                                <div class="bar-5" style="width: {{ bar_5 }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="side right">
+                            <div>{{ total_5_stars }}</div>
+                        </div>
+                        <div class="side">
+                            <div>4 star</div>
+                        </div>
+                        <div class="middle">
+                            <div class="bar-container">
+                                <div class="bar-4" style="width: {{ bar_4 }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="side right">
+                            <div>{{ total_4_stars }}</div>
+                        </div>
+                        <div class="side">
+                            <div>3 star</div>
+                        </div>
+                        <div class="middle">
+                            <div class="bar-container">
+                                <div class="bar-3" style="width: {{ bar_3 }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="side right">
+                            <div>{{ total_3_stars }}</div>
+                        </div>
+                        <div class="side">
+                            <div>2 star</div>
+                        </div>
+                        <div class="middle">
+                            <div class="bar-container">
+                                <div class="bar-2" style="width: {{ bar_2 }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="side right">
+                            <div>{{ total_2_stars }}</div>
+                        </div>
+                        <div class="side">
+                            <div>1 star</div>
+                        </div>
+                        <div class="middle">
+                            <div class="bar-container">
+                                <div class="bar-1" style="width: {{ bar_1 }}%;"></div>
+                            </div>
+                        </div>
+                        <div class="side right">
+                            <div>{{ total_1_stars }}</div>
+                        </div>
+                        <br/><br/>
+                        <p>{{ total_average|floatformat:2 }} average based on {{ article.comments.all|length }} reviews.</p>
+                    </div>
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                    {% endwith %}
+                </div></div>
+                {% endif %}
+                                 
+                <div class="bg-light px-3 pt-3 rounded mt-3 shadow">
+                    <div class="jumbotron">
+                        <form action="{% url 'create_comment' %}" method="post">
+                            {% csrf_token %}                                                                                                        
+                            <div class="mb-3">
+                                <br/>
+                                <label class="form-label">Comments:</label>
+                                <input type="text" class="form-control" name="comment" style="height: 100px;" required id="id_comment"/>
+                            </div>
+                            <label class="form-label comment-stars">How many stars?</label>
+                            <div class="mb-3">
+                                <div class="rate">
+                                    <input type="radio" id="star5" name="star" value="5" />
+                                    <label for="star5" title="text">5 stars</label>
+                                    <input type="radio" id="star4" name="star" value="4" />
+                                    <label for="star4" title="text">4 stars</label>
+                                    <input type="radio" id="star3" name="star" value="3" />
+                                    <label for="star3" title="text">3 stars</label>
+                                    <input type="radio" id="star2" name="star" value="2" />
+                                    <label for="star2" title="text">2 stars</label>
+                                    <input type="radio" id="star1" name="star" value="1" />
+                                    <label for="star1" title="text">1 star</label>
+                                </div>
+                            </div>
+                            <input type="hidden" name="author" required id="id_author" value="{{ user|find_user_id }}"/>
+                            <input type="hidden" name="article" required id="id_title" value="{{ article.pk }}"/>
+                            <br/><br/>
+                            <button class="btn btn-lg btn-primary ml-2 comment-commit" type="submit">Comment</button>                            
+                        </form>
+                    </div>
+                </div>
+
+                    
+                    {% for comment in article.comments.all %}
+                    <div class="jumbotron comment-jumbotron">
+                        <div class="article-entry">
+                            <div class=" bg-light comment-container pb-2">
+                                <span class="text-muted font-weight-bold">
+                                    {{ comment.author }} &middot; {{ comment.date }}
+                                    {% for _ in "x"|ljust:comment.star %}
+                                    <span class="fa fa-star checked" style="color: orange;"></span>
+                                    {% endfor %}
+                                </span>
+                                {% with 5|sub:comment.star as range %}
+                                {% for _ in "x"|ljust:range %}
+                                <span class="far fa-star" style="color: orange;"></span>
+                                {% endfor %}
+                                {% endwith %}
+                                <p class="comment-comment">
+                                    {{ comment.comment }}
+                                    {% if user == comment.author %}
+                                    <span class="article-detail-ed mb-3">
+                                        <a class="btn btn-primary " href="{% url 'comment_edit' comment.pk %}">Edit</a>
+                                        <a class="btn btn-primary " href="{% url 'comment_delete' comment.pk %}">Delete</a>
+                                    </span>
+                                    {% endif %}
+                                </p>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+    
+    {% if article.comments.all|length == 0 %}
+    <div style="height: 2rem;"></div>
+    {% endif %}
+</div>
+
+
 {% endblock content %}
+
+{{ comment_form|crispy }}
+
+
+https://stackoverflow.com/questions/31916408/is-django-can-modify-variable-value-in-template
+
+&middot;
+Here we go total: {{ total }}
+total_star_1: {{ total_1_stars }}
+total_star_2: {{ total_2_stars }}
+total_star_3: {{ total_3_stars }}
+total_star_4: {{ total_4_stars }}
+total_star_5: {{ total_5_stars }}
+total_average: {{ total_average }}
+what is this: {{ total_average|floatformat:"0" }}
+total_average_first: {{ total_average_first }}

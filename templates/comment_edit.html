@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load poll_extras %}
+
+{% block cssstyle %}
+<link rel="stylesheet" href="{% static 'css/form.css' %}">
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
+<link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
+{% endblock cssstyle %}
+
+{% block title %}Edit Comment{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="bg-light p-5 rounded mt-5 shadow">
+        <div class="jumbotron">
+            <h1 class="display-4 text-center">{{ article.title|capfirst }}</h1>
+            <form action="" method="post" >
+                {% csrf_token %}
+                {{ form.comment.label_tag }}
+                <br/>{{ form.comment}}
+                <br/>{{ form.star.label_tag }}
+                <br/>
+                <label class="form-label comment-stars">How many stars?</label>
+                <div class="mb-3">
+                    <div class="rate">
+                        <input type="radio" id="star5" name="star" value="5" />
+                        <label for="star5" title="text">5 stars</label>
+                        <input type="radio" id="star4" name="star" value="4" />
+                        <label for="star4" title="text">4 stars</label>
+                        <input type="radio" id="star3" name="star" value="3" />
+                        <label for="star3" title="text">3 stars</label>
+                        <input type="radio" id="star2" name="star" value="2" />
+                        <label for="star2" title="text">2 stars</label>
+                        <input type="radio" id="star1" name="star" value="1" />
+                        <label for="star1" title="text">1 star</label>
+                    </div>
+                </div>
+                <input type="hidden" name="author" required id="id_author" value="{{ user|find_user_id }}"/>
+                <input type="hidden" name="article" required id="id_title" value="{{ article.pk }}"/>
+                <br/><br/>
+                <button class="btn btn-lg btn-primary ml-2 comment-commit" type="submit">Comment</button>        
+            </form>
+        </div>
+    </div>
+
+    
+</div>
+{% endblock content %}
+<div class="controls">
+    {{ form.title.label_tag }}
+    <br />{{ form.title }}
+    <br />
+    <br />{{ form.body.label_tag }}
+    <br />{{ form.body }}
+    <br />
+    <br />
+    {% if article.image.url != '/images/' %}
+        <img class="form-image" src="{{ article.image.url }}">
+    {% endif %}
+    <br/>
+    <br/>{{ form.image }}
+</div>
+<br />
+<button class="btn btn-lg btn-primary ml-2" type="submit">Update</button>
