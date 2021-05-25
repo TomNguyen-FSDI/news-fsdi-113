@@ -19,8 +19,10 @@
                 <h2>{{ object.title|capfirst }}</h2>
                 
                 <br />
-                {% if article.image.url != '/images/' %}
-                <img class="rounded mx-auto d-block img-fluid" src="{% static article.image.url %}" alt="your image">
+                {% if article.image.url != '/static/images/' %}
+                {% with article_image=article.image.url|get_image_url %}
+                <img class="rounded mx-auto d-block img-fluid" src="/static/images/{{ article_image }}.jpg" alt="your image">
+                {% endwith %}
                 {% endif %}
                 <br />
                 <span class="text-muted">

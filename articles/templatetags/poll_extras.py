@@ -83,7 +83,9 @@ def find_user_id(user):
 @register.filter(name='get_image_url')
 def get_image_url(full_url):
     all_url = full_url.split('/')
-    return all_url[len(all_url)-1]
+    file_name = all_url[len(all_url)-1]
+    file_name_junk = file_name.split('_')
+    return file_name_junk[0]
 
 
 register.filter('sub', sub)
