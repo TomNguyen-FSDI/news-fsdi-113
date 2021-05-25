@@ -14,7 +14,9 @@
         <div class="card mx-auto">
             {% if article.image.url != '/images/' %}         
                 <a href="{% url 'article_detail' article.pk %}">
-                    <img src="{% static article.image.url|get_image_url %}" class="img-fluid" alt="image">
+                    {% with article_image=article.image.url|get_image_url %}
+                    <img src="{% static article_image %}" class="img-fluid" alt="image">
+                    {% endwith %}
                 </a>            
             {% endif %}
             <div class="card-body">
