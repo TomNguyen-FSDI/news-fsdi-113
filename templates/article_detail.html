@@ -58,7 +58,7 @@
                         <span class="fa fa-star checked" style="color: orange;"></span>
                         {% endfor %}
                     {% endif %}
-                    {% if star_left != 0 %}
+                    {% if total_average_first != 5 %}
                         {% for _ in "x"|ljust:stars_left %}
                         <span class="far fa-star" style="color: orange;"></span>
                         {% endfor %}
@@ -155,7 +155,7 @@
                                     <label for="star1" title="text">1 star</label>
                                 </div>
                             </div>
-                            <input type="hidden" name="author" required id="id_author" value="{{ user|find_user_id }}"/>
+                            <input type="hidden" name="author" required id="id_author" value="{{ user|find_user_id|add:1 }}"/>
                             <input type="hidden" name="article" required id="id_title" value="{{ article.pk }}"/>
                             <br/><br/>
                             <button class="btn btn-lg btn-primary ml-2 comment-commit" type="submit">Comment</button>                            
