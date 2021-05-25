@@ -130,6 +130,7 @@
                 </div></div>
                 {% endif %}
                                  
+                {% if user.is_authenticated %}
                 <div class="bg-light px-3 pt-3 rounded mt-3 shadow">
                     <div class="jumbotron">
                         <form action="{% url 'create_comment' %}" method="post">
@@ -161,7 +162,7 @@
                         </form>
                     </div>
                 </div>
-
+                {% endif %}
                     
                     {% for comment in article.comments.all %}
                     <div class="jumbotron comment-jumbotron">
