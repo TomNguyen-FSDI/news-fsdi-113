@@ -15,7 +15,8 @@
             {% if article.image.url != '/images/' %}         
                 <a href="{% url 'article_detail' article.pk %}">
                     {% with article_image=article.image.url|get_image_url %}
-                    <img src="{% static article_image %}" class="img-fluid" alt="image">
+                    {{ article.image.url|get_image_url }}
+                    <img src="{% static 'css_badge.PNG' %}" class="img-fluid" alt="image">
                     {% endwith %}
                 </a>            
             {% endif %}
