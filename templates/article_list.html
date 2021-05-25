@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load poll_extras %}
 {% block cssstyle %}
 <link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
 {% endblock cssstyle %}
@@ -13,7 +14,7 @@
         <div class="card mx-auto">
             {% if article.image.url != '/images/' %}         
                 <a href="{% url 'article_detail' article.pk %}">
-                    <img src="{{ article.image.url }}" class="img-fluid" alt="image">
+                    <img src="{% static article.image.url|get_image_url %}" class="img-fluid" alt="image">
                 </a>            
             {% endif %}
             <div class="card-body">

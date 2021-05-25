@@ -80,9 +80,16 @@ def find_user_id(user):
             return article.author_id
     return 0
 
+@register.filter(name='get_image_url')
+def get_image_url(full_url):
+    all_url = full_url.split('/')
+    return all_url[len(all_url)-1]
+
+
 register.filter('sub', sub)
 register.filter('total_stars', total_stars)
 register.filter('total_num_stars', total_num_stars)
 register.filter('total_stars_average', total_stars_average)
 register.filter('total_bar_average', total_bar_average)
 register.filter('find_user_id', find_user_id)
+register.filter('get_image_url', get_image_url)
