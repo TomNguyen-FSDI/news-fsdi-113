@@ -73,7 +73,7 @@ def total_bar_average(pk, total_star):
 
 @register.filter(name='find_user_id')
 def find_user_id(user):
-    print(user)
+    # print(user)
     articles = Article.objects.all()
     for article in articles:
         if article.author == user:

@@ -49,6 +49,7 @@ class Comment(models.Model):
 
     def get_absolute_url(self):
         id = self.article.get_id()
+        print(f'he is saying that {id}')
         # id2 = self.article.get_id
         # print(f'hello world: {id} {id2}')
         # return reverse('article_list')

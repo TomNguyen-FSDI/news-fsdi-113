@@ -67,7 +67,7 @@ class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return obj.author == self.request.user
 
 
-class CommentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
     template_name = "comment_new.html"
     fields = ('comment', 'star','author','article') 
@@ -81,12 +81,14 @@ class CommentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     ## print(model.article.field)
 
     def form_valid(self, form): # for LoginRequiredMixin
-        print(self.request.article)
-        print(self.request.user)
+        # print(self.request.article)
+        # print(self.request.user)
+        form.instance.author = self.request.user
+        return super().form_valid(form)
     
-    def test_func(self): # for UserPassesTestMixin
-        obj = self.get_object()
-        return obj.author == self.request.user
+    # def test_func(self): # for UserPassesTestMixin
+    #     obj = self.get_object()
+    #     return obj.author == self.request.user
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
