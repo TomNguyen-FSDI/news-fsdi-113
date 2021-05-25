@@ -16,7 +16,7 @@ class Article(models.Model):
         get_user_model(),       # the user that is creating the model
         on_delete = models.CASCADE
     )
-    image = models.ImageField(upload_to='staticfiles/images/', default='staticfiles/images/')
+    image = models.ImageField(upload_to='static/images/', default='staticfiles/images/')
 
     def __str__(self):
         return self.title
