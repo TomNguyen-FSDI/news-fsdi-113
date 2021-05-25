@@ -20,7 +20,7 @@
                 
                 <br />
                 {% if article.image.url != '/images/' %}
-                <img class="rounded mx-auto d-block img-fluid" src="{{ article.image.url }}" alt="your image">
+                <img class="rounded mx-auto d-block img-fluid" src="{% static article.image.url %}" alt="your image">
                 {% endif %}
                 <br />
                 <span class="text-muted">
