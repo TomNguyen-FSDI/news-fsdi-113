@@ -15,7 +15,7 @@
             {% if article.image.url != '/static/images/' %}         
                 <a href="{% url 'article_detail' article.pk %}">
                     {% with article_image=article.image.url|get_image_url %}
-                    <img src="/static/images/{{ article_image }}.jpg" class="rounded mx-auto d-block img-fluid" alt="image">
+                    <img class="rounded mx-auto d-block img-fluid" src="{{ article.image.url }}" alt="your image">
                     {% endwith %}
                 </a>            
             {% endif %}
@@ -45,6 +45,12 @@
         {% endfor %}
     </div>
 {% endblock content %}
+
+for local:
+<img class="rounded mx-auto d-block img-fluid" src="{{ article.image.url }}" alt="your image">
+
+for heroku: (line 18)
+<img src="/static/images/{{ article_image }}.jpg" class="rounded mx-auto d-block img-fluid" alt="image">
 
 <div class="card-footer text-center text-muted">
         {% for comment in article.comments.all %}

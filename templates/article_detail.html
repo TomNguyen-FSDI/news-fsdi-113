@@ -21,7 +21,7 @@
                 <br />
                 {% if article.image.url != '/static/images/' %}
                 {% with article_image=article.image.url|get_image_url %}
-                <img class="rounded mx-auto d-block img-fluid" src="/static/images/{{ article_image }}.jpg" alt="your image">
+                <img class="rounded mx-auto d-block img-fluid" src="{{ article.image.url }}" alt="your image">
                 {% endwith %}
                 {% endif %}
                 <br />
@@ -201,8 +201,16 @@
     {% endif %}
 </div>
 
-
 {% endblock content %}
+
+
+
+
+For local (line 24)
+<img class="rounded mx-auto d-block img-fluid" src="{{ article.image.url }}" alt="your image">
+
+For heroku:
+<img class="rounded mx-auto d-block img-fluid" src="/static/images/{{ article_image }}.jpg" alt="your image">
 
 {{ comment_form|crispy }}
 
