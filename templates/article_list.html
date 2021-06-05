@@ -15,7 +15,7 @@
             {% if article.image.url != '/static/images/' %}         
                 <a href="{% url 'article_detail' article.pk %}">
                     {% with article_image=article.image.url|get_image_url %}
-                    <img class="rounded mx-auto d-block img-fluid" src="{{ article.image.url }}" alt="your image">
+                    <img src="/static/images/{{ article_image }}.jpg" class="rounded mx-auto d-block img-fluid" alt="image">
                     {% endwith %}
                 </a>            
             {% endif %}
